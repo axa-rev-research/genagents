@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Demographics Report</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        h1 {
+            text-align: center;
+        }
+        .attribute {
+            margin-bottom: 20px;
+        }
+        .attribute h2 {
+            margin-bottom: 10px;
+        }
+        .attribute img {
+            max-width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <h1>Demographics Report</h1>
+    
+    <div class="attribute">
+        <h2>first_name</h2>
+        <ul>
+            
+                
+                <li><strong>mode:</strong> Robert</li>
+                
+            
+                
+                <li><strong>count:</strong> 3505</li>
+                
+            
+                
+            
+        </ul>
+        
+        <img src="plots/first_name_categories.png" alt="Incidence of Categories for first_name">
+        
+    </div>
+    
+    <div class="attribute">
+        <h2>last_name</h2>
+        <ul>
+            
+                
+                <li><strong>mode:</strong> Johnson</li>
+                
+            
+                
+                <li><strong>count:</strong> 3505</li>
+                
+            
+                
+            
+        </ul>
+        
+        <img src="plots/last_name_categories.png" alt="Incidence of Categories for last_name">
+        
+    </div>
+    
+    <div class="attribute">
+        <h2>age</h2>
+        <ul>
+            
+                
+                <li><strong>mean:</strong> 48.378316690442226</li>
+                
+            
+                
+                <li><strong>median:</strong> 47</li>
+                
+            
+                
+                <li><strong>stdev:</strong> 17.677139611931683</li>
+                
+            
+                
+                <li><strong>min:</strong> 18</li>
+                
+            
+                
+                <li><strong>max:</strong> 89</li>
+                
+            
+        </ul>
+        
+    </div>
+    
+    <div class="attribute">
+        <h2>sex</h2>
+        <ul>
+            
+                
+                <li><strong>mode:</strong> Female</li>
+                
+            
+                
+                <li><strong>count:</strong> 3505</li>
+                
+            
+                
+            
+        </ul>
+        
+        <img src="plots/sex_categories.png" alt="Incidence of Categories for sex">
+        
+    </div>
+    
+    <div class="attribute">
+        <h2>ethnicity</h2>
+        <ul>
+            
+                
+                <li><strong>mode:</strong> Germany</li>
+                
+            
+                
+                <li><strong>count:</strong> 3505</li>
+                
+            
+                
+            
+        </ul>
+        
+        <img src="plots/ethnicity_categories.png" alt="Incidence of Categories for ethnicity">
+        
+    </div>
+    
+    <div class="attribute">
+        <h2>race</h2>
+        <ul>
+            
+                
+                <li><strong>mode:</strong> White</li>
+                
+            
+                
+                <li><strong>count:</strong> 3505</li>
+                
+            
+                
+            
+        </ul>
+        
+        <img src="plots/race_categories.png" alt="Incidence of Categories for race">
+        
+    </div>
+    
+    <div class="attribute">
+        <h2>detailed_race</h2>
+        <ul>
+            
+                
+                <li><strong>mode:</strong> White</li>
+                
+            
+                
+                <li><strong>count:</strong> 3505</li>
+                
+            
+                
+            
+        </ul>
+        
+        <img src="plots/detailed_race_categories.png" alt="Incidence of Categories for detailed_race">
+        
+    </div>
+    
+    <div class="attribute">
+        <h2>hispanic_origin</h2>
+        <ul>
+            
+                
+                <li><strong>mode:</strong> Not Hispanic</li>
+                
+            
+                
+                <li><strong>count:</strong> 3505</li>
+                
+            
+                
+            
+        </ul>
+        
+        <img src="plots/hispanic_origin_categories.png" alt="Incidence of Categories for hispanic_origin">
+        
+    </div>
+    
+    <div class="attribute">
+        <h2>street_address</h2>
+        <ul>
+            
+                
+                <li><strong>mode:</strong> 123 Elm Street</li>
+                
+            
+                
+                <li><strong>count:</strong> 3505</li>
+                
+            
+                
+            
+        </ul>
+        
+        <img src="plots/street_address_categories.png" alt="Incidence of Categories for street_address">
+        
+    </div>
+    
+    <div class="attribute">
+        <h2>city</h2>
+        <ul>
+            
+                
+                <li><strong>mode:</strong> Charleston</li>
+                
+            
+                
+                <li><strong>count:</strong> 3505</li>
+                
+            
+                
+            
+        </ul>
+        
+        <img src="plots/city_categories.png" alt="Incidence of Categories for city">
+        
+    </div>
+    
+    <div class="attribute">
+        <h2>state</h2>
+        <ul>
+            
+                
+                <li><strong>mode:</strong> SC</li>
+                
+            
+                
+                <li><strong>count:</strong> 3505</li>
+                
+            
+                
+            
+        </ul>
+        
+        <img src="plots/state_categories.png" alt="Incidence of Categories for state">
+        
+    </div>
+    
+    <div class="attribute">
+        <h2>political_views</h2>
+        <ul>
+            
+                
+                <li><strong>mode:</strong> Moderate, middle of the road</li>
+                
+            
+                
+                <li><strong>count:</strong> 3505</li>
+                
+            
+                
+            
+        </ul>
+        
+        <img src="plots/political_views_categories.png" alt="Incidence of Categories for political_views">
+        
+    </div>
+    
+    <div class="attribute">
+        <h2>party_identification</h2>
+        <ul>
+            
+                
+                <li><strong>mode:</strong> Independent (neither, no response)</li>
+                
+            
+                
+                <li><strong>count:</strong> 3505</li>
+                
+            
+                
+            
+        </ul>
+        
+        <img src="plots/party_identification_categories.png" alt="Incidence of Categories for party_identification">
+        
+    </div>
+    
+    <div class="attribute">
+        <h2>residence_at_16</h2>
+        <ul>
+            
+                
+                <li><strong>mode:</strong> South Atlantic</li>
+                
+            
+                
+                <li><strong>count:</strong> 3505</li>
+                
+            
+                
+            
+        </ul>
+        
+        <img src="plots/residence_at_16_categories.png" alt="Incidence of Categories for residence_at_16">
+        
+    </div>
+    
+    <div class="attribute">
+        <h2>same_residence_since_16</h2>
+        <ul>
+            
+                
+                <li><strong>mode:</strong> Same city</li>
+                
+            
+                
+                <li><strong>count:</strong> 3505</li>
+                
+            
+                
+            
+        </ul>
+        
+        <img src="plots/same_residence_since_16_categories.png" alt="Incidence of Categories for same_residence_since_16">
+        
+    </div>
+    
+    <div class="attribute">
+        <h2>family_structure_at_16</h2>
+        <ul>
+            
+                
+                <li><strong>mode:</strong> Lived with parents</li>
+                
+            
+                
+                <li><strong>count:</strong> 3505</li>
+                
+            
+                
+            
+        </ul>
+        
+        <img src="plots/family_structure_at_16_categories.png" alt="Incidence of Categories for family_structure_at_16">
+        
+    </div>
+    
+    <div class="attribute">
+        <h2>family_income_at_16</h2>
+        <ul>
+            
+                
+                <li><strong>mode:</strong> Average</li>
+                
+            
+                
+                <li><strong>count:</strong> 3505</li>
+                
+            
+                
+            
+        </ul>
+        
+        <img src="plots/family_income_at_16_categories.png" alt="Incidence of Categories for family_income_at_16">
+        
+    </div>
+    
+    <div class="attribute">
+        <h2>fathers_highest_degree</h2>
+        <ul>
+            
+                
+                <li><strong>mode:</strong> High school</li>
+                
+            
+                
+                <li><strong>count:</strong> 3505</li>
+                
+            
+                
+            
+        </ul>
+        
+        <img src="plots/fathers_highest_degree_categories.png" alt="Incidence of Categories for fathers_highest_degree">
+        
+    </div>
+    
+    <div class="attribute">
+        <h2>mothers_highest_degree</h2>
+        <ul>
+            
+                
+                <li><strong>mode:</strong> High school</li>
+                
+            
+                
+                <li><strong>count:</strong> 3505</li>
+                
+            
+                
+            
+        </ul>
+        
+        <img src="plots/mothers_highest_degree_categories.png" alt="Incidence of Categories for mothers_highest_degree">
+        
+    </div>
+    
+    <div class="attribute">
+        <h2>mothers_work_history</h2>
+        <ul>
+            
+                
+                <li><strong>mode:</strong> Yes</li>
+                
+            
+                
+                <li><strong>count:</strong> 3505</li>
+                
+            
+                
+            
+        </ul>
+        
+        <img src="plots/mothers_work_history_categories.png" alt="Incidence of Categories for mothers_work_history">
+        
+    </div>
+    
+    <div class="attribute">
+        <h2>marital_status</h2>
+        <ul>
+            
+                
+                <li><strong>mode:</strong> Married</li>
+                
+            
+                
+                <li><strong>count:</strong> 3505</li>
+                
+            
+                
+            
+        </ul>
+        
+        <img src="plots/marital_status_categories.png" alt="Incidence of Categories for marital_status">
+        
+    </div>
+    
+    <div class="attribute">
+        <h2>work_status</h2>
+        <ul>
+            
+                
+                <li><strong>mode:</strong> Working full time</li>
+                
+            
+                
+                <li><strong>count:</strong> 3505</li>
+                
+            
+                
+            
+        </ul>
+        
+        <img src="plots/work_status_categories.png" alt="Incidence of Categories for work_status">
+        
+    </div>
+    
+    <div class="attribute">
+        <h2>military_service_duration</h2>
+        <ul>
+            
+                
+                <li><strong>mode:</strong> No active duty</li>
+                
+            
+                
+                <li><strong>count:</strong> 3505</li>
+                
+            
+                
+            
+        </ul>
+        
+        <img src="plots/military_service_duration_categories.png" alt="Incidence of Categories for military_service_duration">
+        
+    </div>
+    
+    <div class="attribute">
+        <h2>religion</h2>
+        <ul>
+            
+                
+                <li><strong>mode:</strong> Protestant</li>
+                
+            
+                
+                <li><strong>count:</strong> 3505</li>
+                
+            
+                
+            
+        </ul>
+        
+        <img src="plots/religion_categories.png" alt="Incidence of Categories for religion">
+        
+    </div>
+    
+    <div class="attribute">
+        <h2>religion_at_16</h2>
+        <ul>
+            
+                
+                <li><strong>mode:</strong> Protestant</li>
+                
+            
+                
+                <li><strong>count:</strong> 3505</li>
+                
+            
+                
+            
+        </ul>
+        
+        <img src="plots/religion_at_16_categories.png" alt="Incidence of Categories for religion_at_16">
+        
+    </div>
+    
+    <div class="attribute">
+        <h2>born_in_us</h2>
+        <ul>
+            
+                
+                <li><strong>mode:</strong> Yes</li>
+                
+            
+                
+                <li><strong>count:</strong> 3505</li>
+                
+            
+                
+            
+        </ul>
+        
+        <img src="plots/born_in_us_categories.png" alt="Incidence of Categories for born_in_us">
+        
+    </div>
+    
+    <div class="attribute">
+        <h2>us_citizenship_status</h2>
+        <ul>
+            
+                
+                <li><strong>mode:</strong> A U.S. citizen</li>
+                
+            
+                
+                <li><strong>count:</strong> 3505</li>
+                
+            
+                
+            
+        </ul>
+        
+        <img src="plots/us_citizenship_status_categories.png" alt="Incidence of Categories for us_citizenship_status">
+        
+    </div>
+    
+    <div class="attribute">
+        <h2>highest_degree_received</h2>
+        <ul>
+            
+                
+                <li><strong>mode:</strong> High school</li>
+                
+            
+                
+                <li><strong>count:</strong> 3505</li>
+                
+            
+                
+            
+        </ul>
+        
+        <img src="plots/highest_degree_received_categories.png" alt="Incidence of Categories for highest_degree_received">
+        
+    </div>
+    
+    <div class="attribute">
+        <h2>speak_other_language</h2>
+        <ul>
+            
+                
+                <li><strong>mode:</strong> No</li>
+                
+            
+                
+                <li><strong>count:</strong> 3505</li>
+                
+            
+                
+            
+        </ul>
+        
+        <img src="plots/speak_other_language_categories.png" alt="Incidence of Categories for speak_other_language">
+        
+    </div>
+    
+    <div class="attribute">
+        <h2>total_wealth</h2>
+        <ul>
+            
+                
+                <li><strong>mode:</strong> Less than $5,000</li>
+                
+            
+                
+                <li><strong>count:</strong> 3505</li>
+                
+            
+                
+            
+        </ul>
+        
+        <img src="plots/total_wealth_categories.png" alt="Incidence of Categories for total_wealth">
+        
+    </div>
+    
+</body>
+</html>

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Demographics Report</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        h1 {
+            text-align: center;
+        }
+        .attribute {
+            margin-bottom: 20px;
+        }
+        .attribute h2 {
+            margin-bottom: 10px;
+        }
+        .attribute img {
+            max-width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <h1>Demographics Report</h1>
+    {% for attribute, stat in stats.items() %}
+    <div class="attribute">
+        <h2>{{ attribute }}</h2>
+        <ul>
+            {% for stat_name, value in stat.items() %}
+                {% if stat_name != 'categories' %}
+                <li><strong>{{ stat_name }}:</strong> {{ value }}</li>
+                {% endif %}
+            {% endfor %}
+        </ul>
+        {% if 'categories' in stat %}
+        <img src="{{ plot_folder }}/{{ attribute }}_categories.png" alt="Incidence of Categories for {{ attribute }}">
+        {% endif %}
+    </div>
+    {% endfor %}
+</body>
+</html>
