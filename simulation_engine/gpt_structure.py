@@ -6,8 +6,10 @@ from typing import List, Union
 from simulation_engine.settings import *
 
 openai.api_key = OPENAI_API_KEY
-
-
+from openai import AzureOpenAI
+ 
+#if USE_AZURE == True:
+openai.api_type = 'azure'
 # ============================================================================
 # #######################[SECTION 1: HELPER FUNCTIONS] #######################
 # ============================================================================
@@ -50,124 +52,159 @@ def generate_prompt(prompt_input: Union[str, List[str]],
 # ####################### [SECTION 2: SAFE GENERATE] #########################
 # ============================================================================
 
-def gpt_request(prompt: str, 
-                model: str = "gpt-4o", 
+def gpt_request(prompt: str,
+                model: str = "gpt-4o",
                 max_tokens: int = 1500) -> str:
-  """Make a request to OpenAI's GPT model."""
-  if model == "o1-preview": 
-    try:
-      client = openai.OpenAI(api_key=OPENAI_API_KEY)
-      response = client.chat.completions.create(
-        model=model,
-        messages=[{"role": "user", "content": prompt}]
-      )
-      return response.choices[0].message.content
-    except Exception as e:
-      return f"GENERATION ERROR: {str(e)}"
+    """Make a request to OpenAI's GPT model (also can be hosted in Azure)."""
+    if 'USE_AZURE' in globals() and USE_AZURE:
+      print ("Running Azure model ", model)
+      try:
+          # Initialize Azure OpenAI client with key-based authentication
+          client = AzureOpenAI(
+              azure_endpoint=AZURE_OPENAI_ENDPOINT,
+              api_key=AZURE_OPENAI_API_KEY,
+              api_version=AZURE_MODEL_API_VERSION,
+          )
+          response = client.chat.completions.create(
+              model=model,           
+              messages=[{"role": "user", "content": prompt}],
+              max_tokens=max_tokens,
+              temperature=0.7
+          )
+          print ("RESPONSE ",response)
+          print (response.usage)
+          return response.choices[0].message.content
+      except Exception as e:
+          return f"GENERATION ERROR: {str(e)}"
 
-  try:
-    client = openai.OpenAI(api_key=OPENAI_API_KEY)
-    response = client.chat.completions.create(
-      model=model,
-      messages=[{"role": "user", "content": prompt}],
-      max_tokens=max_tokens,
-      temperature=0.7
-    )
-    return response.choices[0].message.content
-  except Exception as e:
-    return f"GENERATION ERROR: {str(e)}"
+    if model == "o1-preview":
+        print ("Running OpenAI model ", model)
+        try:
+            client = openai.OpenAI(api_key=OPENAI_API_KEY)
+            response = client.chat.completions.create(
+                model=model,
+                messages=[{"role": "user", "content": prompt}]
+            )
+            return response.choices[0].message.content
+        except Exception as e:
+            return f"GENERATION ERROR: {str(e)}"
+
+    try:
+        print ("Running OpenAI model ", model)
+        client = openai.OpenAI(api_key=OPENAI_API_KEY)
+        response = client.chat.completions.create(
+            model=model,
+            messages=[{"role": "user", "content": prompt}],
+            max_tokens=max_tokens,
+            temperature=0.7
+        )
+        print (response.usage)
+        return response.choices[0].message.content
+    except Exception as e:
+        return f"GENERATION ERROR: {str(e)}"
 
 
 def gpt4_vision(messages: List[dict], max_tokens: int = 1500) -> str:
-  """Make a request to OpenAI's GPT-4 Vision model."""
-  try:
-    client = openai.OpenAI(api_key=OPENAI_API_KEY)
-    response = client.chat.completions.create(
-      model="gpt-4o",
-      messages=messages,
-      max_tokens=max_tokens,
-      temperature=0.7
-    )
-    return response.choices[0].message.content
-  except Exception as e:
-    return f"GENERATION ERROR: {str(e)}"
+    """Make a request to OpenAI's GPT-4 Vision model."""
+    try:
+        client = openai.OpenAI(api_key=OPENAI_API_KEY)
+        response = client.chat.completions.create(
+            model="gpt-4o",
+            messages=messages,
+            max_tokens=max_tokens,
+            temperature=0.7
+        )
+        return response.choices[0].message.content
+    except Exception as e:
+        return f"GENERATION ERROR: {str(e)}"
 
 
-def chat_safe_generate(prompt_input: Union[str, List[str]], 
+def chat_safe_generate(prompt_input: Union[str, List[str]],
                        prompt_lib_file: str,
-                       gpt_version: str = "gpt-4o", 
+                       gpt_version: str = "gpt-4o",
                        repeat: int = 1,
-                       fail_safe: str = "error", 
+                       fail_safe: str = "error",
                        func_clean_up: callable = None,
                        verbose: bool = False,
                        max_tokens: int = 1500,
                        file_attachment: str = None,
                        file_type: str = None) -> tuple:
-  """Generate a response using GPT models with error handling & retries."""
-  if file_attachment and file_type:
-    prompt = generate_prompt(prompt_input, prompt_lib_file)
-    messages = [{"role": "user", "content": prompt}]
+    """Generate a response using GPT models with error handling & retries."""
+    if file_attachment and file_type:
+        prompt = generate_prompt(prompt_input, prompt_lib_file)
+        messages = [{"role": "user", "content": prompt}]
 
-    if file_type.lower() == 'image':
-      with open(file_attachment, "rb") as image_file:
-        base64_image = base64.b64encode(image_file.read()).decode('utf-8')
-      messages.append({
-        "role": "user",
-        "content": [
-            {"type": "text", "text": "Please refer to the attached image."},
-            {"type": "image_url", "image_url": 
-              {"url": f"data:image/jpeg;base64,{base64_image}"}}
-        ]
-      })
-      response = gpt4_vision(messages, max_tokens)
+        if file_type.lower() == 'image':
+            with open(file_attachment, "rb") as image_file:
+                base64_image = base64.b64encode(
+                    image_file.read()).decode('utf-8')
+            messages.append({
+                "role": "user",
+                "content": [
+                    {"type": "text", "text": "Please refer to the attached image."},
+                    {"type": "image_url", "image_url":
+                        {"url": f"data:image/jpeg;base64,{base64_image}"}}
+                ]
+            })
+            response = gpt4_vision(messages, max_tokens)
 
-    elif file_type.lower() == 'pdf':
-      pdf_text = extract_text_from_pdf_file(file_attachment)
-      pdf = f"PDF attachment in text-form:\n{pdf_text}\n\n"
-      instruction = generate_prompt(prompt_input, prompt_lib_file)
-      prompt = f"{pdf}"
-      prompt += f"<End of the PDF attachment>\n=\nTask description:\n{instruction}"
-      response = gpt_request(prompt, gpt_version, max_tokens)
+        elif file_type.lower() == 'pdf':
+            pdf_text = extract_text_from_pdf_file(file_attachment)
+            pdf = f"PDF attachment in text-form:\n{pdf_text}\n\n"
+            instruction = generate_prompt(prompt_input, prompt_lib_file)
+            prompt = f"{pdf}"
+            prompt += f"<End of the PDF attachment>\n=\nTask description:\n{instruction}"
+            response = gpt_request(prompt, gpt_version, max_tokens)
 
-  else:
-    prompt = generate_prompt(prompt_input, prompt_lib_file)
-    for i in range(repeat):
-      response = gpt_request(prompt, model=gpt_version)
-      if response != "GENERATION ERROR":
-        break
-      time.sleep(2**i)
     else:
-      response = fail_safe
+        prompt = generate_prompt(prompt_input, prompt_lib_file)
+        for i in range(repeat):
+            response = gpt_request(prompt, model=gpt_version)
+            if response != "GENERATION ERROR":
+                break
+            time.sleep(2**i)
+        else:
+            response = fail_safe
 
-  if func_clean_up:
-    response = func_clean_up(response, prompt=prompt)
+    if func_clean_up:
+        response = func_clean_up(response, prompt=prompt)
 
-  if verbose or DEBUG:
-    print_run_prompts(prompt_input, prompt, response)
+    if verbose or DEBUG:
+        print_run_prompts(prompt_input, prompt, response)
 
-  return response, prompt, prompt_input, fail_safe
+    return response, prompt, prompt_input, fail_safe
 
 
 # ============================================================================
 # #################### [SECTION 3: OTHER API FUNCTIONS] ######################
 # ============================================================================
 
-def get_text_embedding(text: str, 
+def get_text_embedding(text: str,
                        model: str = "text-embedding-3-small") -> List[float]:
-  """Generate an embedding for the given text using OpenAI's API."""
-  if not isinstance(text, str) or not text.strip():
-    raise ValueError("Input text must be a non-empty string.")
+    """Generate an embedding for the given text using OpenAI's API."""
+    if not isinstance(text, str) or not text.strip():
+        raise ValueError("Input text must be a non-empty string.")
 
-  text = text.replace("\n", " ").strip()
-  response = openai.embeddings.create(
-    input=[text], model=model).data[0].embedding
-  return response
+    text = text.replace("\n", " ").strip()
+    
+    if 'USE_AZURE' in globals() and USE_AZURE:
+        client = AzureOpenAI(
+            azure_endpoint=AZURE_OPENAI_ENDPOINT,
+            api_key=AZURE_OPENAI_API_KEY,
+            api_version=AZURE_EMBEDDING_MODEL_API_VERSION,
+        )
+        response = client.embeddings.create(
+            model=model,
+            input=[text]
+        )
+        print (response)
+        return response.data[0].embedding
+
+    response = openai.embeddings.create(
+        input=[text], model=model).data[0].embedding
+    return response
 
 
-
-
-
-
-
-
-
+# ============================================================================
+# ####################### [SECTION 4: SAFE GENERATE] #########################
+# ============================================================================
