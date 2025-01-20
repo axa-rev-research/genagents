@@ -8,8 +8,8 @@ from simulation_engine.settings import *
 #openai.api_key = OPENAI_API_KEY
 from openai import AzureOpenAI
  
-#if USE_AZURE == True:
-openai.api_type = 'azure'
+if USE_AZURE == True:
+    openai.api_type = 'azure'
 # ============================================================================
 # #######################[SECTION 1: HELPER FUNCTIONS] #######################
 # ============================================================================
