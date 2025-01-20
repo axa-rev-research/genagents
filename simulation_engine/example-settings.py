@@ -9,8 +9,7 @@ MAX_CHUNK_SIZE = 4
 
 LLM_VERS = "gpt-4o-mini"
 
-USE_AZURE_LLMS = True
-USE_AZURE_EMBEDDINGS=True
+USE_AZURE = True
 AZURE_OPENAI_ENDPOINT = "ENDPOINT"
 AZURE_OPENAI_API_KEY = "API_KEY"
 # For the LLM model, we use the same variable LLM_VERS even when using Azure

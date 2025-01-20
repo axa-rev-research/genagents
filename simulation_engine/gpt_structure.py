@@ -5,7 +5,7 @@ from typing import List, Union
 
 from simulation_engine.settings import *
 
-openai.api_key = OPENAI_API_KEY
+#openai.api_key = OPENAI_API_KEY
 from openai import AzureOpenAI
  
 #if USE_AZURE == True:
@@ -188,10 +188,12 @@ def get_text_embedding(text: str,
     text = text.replace("\n", " ").strip()
     
     if 'USE_AZURE' in globals() and USE_AZURE:
+        print ("Creating embeddings with Azure")
         client = AzureOpenAI(
             azure_endpoint=AZURE_OPENAI_ENDPOINT,
             api_key=AZURE_OPENAI_API_KEY,
             api_version=AZURE_EMBEDDING_MODEL_API_VERSION,
+            timeout=30.0
         )
         response = client.embeddings.create(
             model=model,
