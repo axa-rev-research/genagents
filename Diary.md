@@ -8,4 +8,8 @@ Create UI application that includes:
 - Write the prompt
 - Generate excel file to download the results.
 
+Questions to address:
+
+What is the best method to prompt?
+Is it better to use categorical or numerical variables?
 

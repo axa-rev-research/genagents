@@ -1,0 +1,106 @@
+import streamlit as st
+import pandas as pd
+import time
+import random
+import json
+# Fix issue with the path
+import sys
+sys.path.append('../genagents')
+
+from genagents.genagents import GenerativeAgent
+
+def load_placeholder(file_path):
+    with open(file_path) as json_file:
+        scratch = json.load(json_file)
+    return scratch 
+
+def generate_excel(type_of_question, query, demographics, response):
+    # Simulate processing time
+    time.sleep(random.uniform(2, 5))
+    
+    # Create DataFrame
+    data = {
+        'Type_of_Question': type_of_question,
+        'Query': query,
+        'Demographics': demographics,
+        'Response': response
+    }
+        
+    df = pd.DataFrame([data])
+    
+    # Generate Excel file
+    filename = f"generated_data_{int(time.time())}.xlsx"
+    df.to_excel(filename, index=False)
+    return filename
+
+def main():
+    st.title("Run study with genagents")
+    
+        # Load placeholder information from JSON file
+    placeholder_file_path = './agent_bank/populations/single_agent/01fd7d2a-0357-4c1b-9f3e-8eade2d537ae/scratch.json'
+    scratch_data = load_placeholder(placeholder_file_path)
+
+    # Field 1: Select
+    type_of_question_options = ['Categorical question', 'Numerical question']
+    type_of_question = st.selectbox("Select type of question", type_of_question_options)
+    
+     # Field 3: Text Entry with dynamic placeholder
+    if type_of_question == "Categorical question":
+        placeholder = "{'Do you enjoy outdoor activities?': ['Yes', 'No', 'Sometimes']}"
+    else:
+        placeholder = "{'On a scale of 1 to 10, how much do you enjoy coding?': [1, 10]}"
+    
+    # Field 2: Text Entry
+    query = st.text_input("Enter the question", value=placeholder)
+    
+    # Demographics: Large Text Area
+    demographics = st.text_area("Enter demographics information", height=300, value=scratch_data)
+    
+    # Output field
+    output_placeholder = st.empty()
+
+    # Submit Button
+    if st.button("Generate request"):
+        # Progress window
+        #progress_bar = st.progress(0)
+        status_text = st.empty()
+        
+        #for percent_complete in range(0, 101, 20):
+        #    time.sleep(0.5)
+        #    progress_bar.progress(percent_complete)
+         #   status_text.text(f"Processing: {percent_complete}% complete")
+        status_text.text("Calling LLMs ...")
+        agent = GenerativeAgent()
+        try:
+            demographics_formatted = eval(demographics)
+        except:
+            print ("ERROR in json")
+            output_placeholder.text("ERROR in formatting the demographics")
+            demographics.value = scratch_data        
+        
+        agent.update_scratch(demographics_formatted)       
+
+        if type_of_question == "Categorical question":
+            response = agent.categorical_resp(eval(query))
+        else:
+            response = agent.numerical_resp(eval(query))
+        status_text.text("Generating excel ...")
+        # Generate and provide download
+        filename = generate_excel(type_of_question,query, demographics, response)
+        
+        with open(filename, "rb") as file:
+            st.download_button(
+                label="Download Excel File",
+                data=file,
+                file_name=filename,
+                mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+            )
+        status_text.text("File generation complete!")
+
+        output_placeholder.text(response)
+        # Optional restart
+        if st.button("Start Over"):
+            st.experimental_rerun()
+
+if __name__ == "__main__":
+    main()
