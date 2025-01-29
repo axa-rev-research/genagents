@@ -5,8 +5,8 @@ import random
 import json
 # Fix issue with the path
 import sys
-sys.path.append('../genagents')
-
+import os
+sys.path.insert(0, os.path.abspath(os.path.dirname(__file__)))  # Add current folder to the python path
 from genagents.genagents import GenerativeAgent
 
 def load_placeholder(file_path):
@@ -36,8 +36,9 @@ def generate_excel(type_of_question, query, demographics, response):
 def main():
     st.title("Run study with genagents")
     
-        # Load placeholder information from JSON file
-    placeholder_file_path = './agent_bank/populations/gss_agents/0a1aa8c2-382a-4cd3-9d02-3a34e0592bbd/scratch.json'
+    # Load placeholder information from JSON file
+    current_path = os.path.dirname(os.path.abspath(__file__))
+    placeholder_file_path = os.path.join(current_path, 'agent_bank/populations/gss_agents/0a1aa8c2-382a-4cd3-9d02-3a34e0592bbd/scratch.json')
     scratch_data = load_placeholder(placeholder_file_path)
 
     # Field 1: Select

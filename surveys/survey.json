@@ -1,5 +1,5 @@
 {
-         "population_path": "/Users/rgarzon/Documents/Stanford/genagents/populations/repeat_20_times",
+         "population_path": "/Users/rgarzon/Documents/Stanford/genagents/populations/repeat_10_times",
          "questions" : {
             "How much longer do you expect to live relative to others in your age?" 
         : ["I expect to live longer.", "I expect to live about the same time.", "I expect to die sooner."]
