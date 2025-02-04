@@ -3,21 +3,26 @@ import pandas as pd
 from genagents.genagents import GenerativeAgent
 import json
 import sys
-# import mlflow
 from datetime import datetime
 from simulation_engine.settings import *
 
-def ask_agents(path, questions):
-    # End any existing run
-    # if mlflow.active_run():
-    #     mlflow.end_run()
+if USE_MLFLOW:
+    import mlflow
 
-    # Generate a unique experiment name using the current date and time
-    # experiment_name = f"survey_experiment_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
-    # experiment_id = mlflow.set_experiment(experiment_name).experiment_id
+def ask_agents(path, questions):
+    # End any existing run if mlflow is enabled
+    if USE_MLFLOW and mlflow.active_run():
+        mlflow.end_run()
+
+    # Generate a unique experiment name using the current date and time if mlflow is enabled
+    if USE_MLFLOW:
+        experiment_name = f"survey_experiment_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
+        experiment_id = mlflow.set_experiment(experiment_name).experiment_id
     
-    # Start an mlflow run
-    # with mlflow.start_run(experiment_id=experiment_id):
+    # Start an mlflow run if mlflow is enabled
+    if USE_MLFLOW:
+        mlflow.start_run(experiment_id=experiment_id)
+
     # List subfolders in the given path
     subfolders = [f.path for f in os.scandir(path) if f.is_dir()]
 
@@ -66,7 +71,9 @@ def ask_agents(path, questions):
     
     # Save the DataFrame to a CSV file named 'answers.csv' in the same path
     df.to_csv(output_path, index=False)
-    # mlflow.log_artifact(output_path)
+    
+    if USE_MLFLOW:
+        mlflow.log_artifact(output_path)
     
     # Save the path and questions to a JSON file named 'survey_metadata.json' in the same path
     metadata = {
@@ -79,21 +86,27 @@ def ask_agents(path, questions):
     metadata_path = os.path.join(path, 'survey_metadata.json')
     with open(metadata_path, 'w') as json_file:
         json.dump(metadata, json_file, indent=4)
-    # mlflow.log_artifact(metadata_path)
     
-    # Log the content of all subfolders
-    # for subfolder in subfolders:
-    #     for root, _, files in os.walk(subfolder):
-    #         for file in files:
-    #             file_path = os.path.join(root, file)
-    #             mlflow.log_artifact(file_path, artifact_path=os.path.relpath(root, path))
+    if USE_MLFLOW:
+        mlflow.log_artifact(metadata_path)
+    
+    # Log the content of all subfolders if mlflow is enabled
+    if USE_MLFLOW:
+        for subfolder in subfolders:
+            for root, _, files in os.walk(subfolder):
+                for file in files:
+                    file_path = os.path.join(root, file)
+                    mlflow.log_artifact(file_path, artifact_path=os.path.relpath(root, path))
+    
+    if USE_MLFLOW:
+        mlflow.end_run()
     
     return df
 
 if __name__ == "__main__":
-    # End any existing run
-    # if mlflow.active_run():
-    #     mlflow.end_run()
+    # End any existing run if mlflow is enabled
+    if USE_MLFLOW and mlflow.active_run():
+        mlflow.end_run()
 
     if len(sys.argv) < 2:
         print("Usage: python run_survey.py <path_to_input_json>")
@@ -108,12 +121,13 @@ if __name__ == "__main__":
     path = input_data['population_path']
     questions = input_data['questions']
     
-    # Log the input JSON file
-    # mlflow.log_artifact(input_path)
+    if USE_MLFLOW:
+        mlflow.log_artifact(input_path)
     
-    # Generate a unique experiment name using the current date and time
-    # experiment_name = f"survey_experiment_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
-    # experiment_id = mlflow.set_experiment(experiment_name).experiment_id
+    # Generate a unique experiment name using the current date and time if mlflow is enabled
+    if USE_MLFLOW:
+        experiment_name = f"survey_experiment_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
+        experiment_id = mlflow.set_experiment(experiment_name).experiment_id
     
     # Example usage
     # input_data = {

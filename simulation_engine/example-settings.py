@@ -24,3 +24,5 @@ POPULATIONS_DIR = f"{BASE_DIR}/agent_bank/populations"
 LLM_PROMPT_DIR = f"{BASE_DIR}/simulation_engine/prompt_template"
 
 MODEL_PARAMS = {"temperature":0.7,"logprobs":True}
+
+USE_MLFLOW = False
