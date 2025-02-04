@@ -36,7 +36,7 @@ if __name__ == "__main__":
     variable_name = 'age'
     #variable_values = ['742 Evergreen Terrace']
     # generate a list of values betweeh 50 and 75 included
-    variable_values = [i for i in range(75, 76)]
+    variable_values = [i for i in range(50, 76)]
 
     matching_folders = scan_folders(base_folder, variable_name, variable_values)
     # Print how many folders have been found

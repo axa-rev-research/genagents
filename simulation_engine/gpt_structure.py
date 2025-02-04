@@ -54,8 +54,12 @@ def generate_prompt(prompt_input: Union[str, List[str]],
 
 def gpt_request(prompt: str,
                 model: str = "gpt-4o",
-                max_tokens: int = 1500) -> str:
+                max_tokens: int = 1500,model_params=None) -> str:
     """Make a request to OpenAI's GPT model (also can be hosted in Azure)."""
+    if (model_params == None):
+        model_params = {'temperature': 0.7,'logprobs':False}
+    else:
+        model_params = MODEL_PARAMS
     if 'USE_AZURE' in globals() and USE_AZURE:
       print ("Running Azure model ", model)
       try:
@@ -69,11 +73,17 @@ def gpt_request(prompt: str,
               model=model,           
               messages=[{"role": "user", "content": prompt}],
               max_tokens=max_tokens,
-              temperature=0.7
-          )
+              temperature=model_params['temperature'],
+              logprobs=model_params['logprobs']
+)
           print ("RESPONSE ",response)
-          print (response.usage)
-          return response.choices[0].message.content
+          print ("******")
+          #print (response.choices[0].logprobs)
+          #print (response.usage)
+          if (model_params['logprobs'] == True):
+              return response.choices[0].message.content,response.choices[0].logprobs
+          else:
+              return response.choices[0].message.content
       except Exception as e:
           return f"GENERATION ERROR: {str(e)}"
 
@@ -85,7 +95,10 @@ def gpt_request(prompt: str,
                 model=model,
                 messages=[{"role": "user", "content": prompt}]
             )
-            return response.choices[0].message.content
+            if (model_params['logprobs'] == True):
+              return response.choices[0].message.content,response.choices[0].logprobs
+            else:
+                return response.choices[0].message.content
         except Exception as e:
             return f"GENERATION ERROR: {str(e)}"
 
@@ -96,10 +109,12 @@ def gpt_request(prompt: str,
             model=model,
             messages=[{"role": "user", "content": prompt}],
             max_tokens=max_tokens,
-            temperature=0.7
+            temperature=model_params['temperature']
         )
-        print (response.usage)
-        return response.choices[0].message.content
+        if (model_params['logprobs'] == True):
+              return response.choices[0].message.content,response.choices[0].logprobs
+        else:
+            return response.choices[0].message.content
     except Exception as e:
         return f"GENERATION ERROR: {str(e)}"
 
@@ -114,6 +129,7 @@ def gpt4_vision(messages: List[dict], max_tokens: int = 1500) -> str:
             max_tokens=max_tokens,
             temperature=0.7
         )
+        
         return response.choices[0].message.content
     except Exception as e:
         return f"GENERATION ERROR: {str(e)}"
@@ -130,6 +146,7 @@ def chat_safe_generate(prompt_input: Union[str, List[str]],
                        file_attachment: str = None,
                        file_type: str = None) -> tuple:
     """Generate a response using GPT models with error handling & retries."""
+    logprobs = None
     if file_attachment and file_type:
         prompt = generate_prompt(prompt_input, prompt_lib_file)
         messages = [{"role": "user", "content": prompt}]
@@ -154,12 +171,21 @@ def chat_safe_generate(prompt_input: Union[str, List[str]],
             instruction = generate_prompt(prompt_input, prompt_lib_file)
             prompt = f"{pdf}"
             prompt += f"<End of the PDF attachment>\n=\nTask description:\n{instruction}"
-            response = gpt_request(prompt, gpt_version, max_tokens)
-
+            ret = gpt_request(prompt, gpt_version, max_tokens,model_params=MODEL_PARAMS)
+            if (len (ret)==2):
+                response = ret[0]
+                logprobs = ret[1]
+            else:
+                response = ret 
     else:
         prompt = generate_prompt(prompt_input, prompt_lib_file)
         for i in range(repeat):
-            response = gpt_request(prompt, model=gpt_version)
+            ret = gpt_request(prompt, model=gpt_version,model_params=MODEL_PARAMS)
+            if (len (ret)==2):
+                response = ret[0]
+                logprobs = ret[1]
+            else:
+                response = ret 
             if response != "GENERATION ERROR":
                 break
             time.sleep(2**i)
@@ -171,8 +197,7 @@ def chat_safe_generate(prompt_input: Union[str, List[str]],
 
     if verbose or DEBUG:
         print_run_prompts(prompt_input, prompt, response)
-
-    return response, prompt, prompt_input, fail_safe
+    return response, prompt, prompt_input, fail_safe,logprobs   
 
 
 # ============================================================================
