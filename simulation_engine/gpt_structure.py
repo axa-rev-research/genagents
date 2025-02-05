@@ -80,10 +80,10 @@ def gpt_request(prompt: str,
           print ("******")
           #print (response.choices[0].logprobs)
           #print (response.usage)
-          if (model_params['logprobs'] == True):
-              return response.choices[0].message.content,response.choices[0].logprobs
-          else:
-              return response.choices[0].message.content
+          #if (model_params['logprobs'] == True):
+          #    return response.choices[0].message.content,response.choices[0].logprobs
+          #else:
+          return response.choices[0].message.content
       except Exception as e:
           return f"GENERATION ERROR: {str(e)}"
 
@@ -95,10 +95,10 @@ def gpt_request(prompt: str,
                 model=model,
                 messages=[{"role": "user", "content": prompt}]
             )
-            if (model_params['logprobs'] == True):
-              return response.choices[0].message.content,response.choices[0].logprobs
-            else:
-                return response.choices[0].message.content
+            #if (model_params['logprobs'] == True):
+            #  return response.choices[0].message.content,response.choices[0].logprobs
+            #else:
+            return response.choices[0].message.content
         except Exception as e:
             return f"GENERATION ERROR: {str(e)}"
 
@@ -111,10 +111,10 @@ def gpt_request(prompt: str,
             max_tokens=max_tokens,
             temperature=model_params['temperature']
         )
-        if (model_params['logprobs'] == True):
-              return response.choices[0].message.content,response.choices[0].logprobs
-        else:
-            return response.choices[0].message.content
+        #if (model_params['logprobs'] == True):
+        #      return response.choices[0].message.content,response.choices[0].logprobs
+        #else:
+        return response.choices[0].message.content
     except Exception as e:
         return f"GENERATION ERROR: {str(e)}"
 
@@ -171,21 +171,21 @@ def chat_safe_generate(prompt_input: Union[str, List[str]],
             instruction = generate_prompt(prompt_input, prompt_lib_file)
             prompt = f"{pdf}"
             prompt += f"<End of the PDF attachment>\n=\nTask description:\n{instruction}"
-            ret = gpt_request(prompt, gpt_version, max_tokens,model_params=MODEL_PARAMS)
-            if (len (ret)==2):
-                response = ret[0]
-                logprobs = ret[1]
-            else:
-                response = ret 
+            response = gpt_request(prompt, gpt_version, max_tokens,model_params=MODEL_PARAMS)
+            #if (len (ret)==2):
+            #    response = ret[0]
+            #    logprobs = ret[1]
+            #else:
+            #    response = ret 
     else:
         prompt = generate_prompt(prompt_input, prompt_lib_file)
         for i in range(repeat):
-            ret = gpt_request(prompt, model=gpt_version,model_params=MODEL_PARAMS)
-            if (len (ret)==2):
-                response = ret[0]
-                logprobs = ret[1]
-            else:
-                response = ret 
+            response = gpt_request(prompt, model=gpt_version,model_params=MODEL_PARAMS)
+            #if (len (ret)==2):
+            #    response = ret[0]
+            #    logprobs = ret[1]
+            #else:
+            #    response = ret 
             if response != "GENERATION ERROR":
                 break
             time.sleep(2**i)
@@ -197,7 +197,7 @@ def chat_safe_generate(prompt_input: Union[str, List[str]],
 
     if verbose or DEBUG:
         print_run_prompts(prompt_input, prompt, response)
-    return response, prompt, prompt_input, fail_safe,logprobs   
+    return response, prompt, prompt_input, fail_safe#,logprobs   
 
 
 # ============================================================================

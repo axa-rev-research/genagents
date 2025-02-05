@@ -74,20 +74,21 @@ def run_gpt_generate_categorical_resp(
   prompt_input = create_prompt_input(agent_desc, questions) 
   fail_safe = _get_fail_safe() 
 
-  output, prompt, prompt_input, fail_safe, logprobs = chat_safe_generate(
+  #output, prompt, prompt_input, fail_safe, logprobs = chat_safe_generate(
+  output, prompt, prompt_input, fail_safe = chat_safe_generate(
     prompt_input, prompt_lib_file, gpt_version, 1, fail_safe, 
     _func_clean_up, verbose)
   # Get the logprob of last token
-  theAnswer = output['responses'][0]
-  logProbLastToken = get_logprob_for_answer(theAnswer, logprobs)
-  return output, [output, prompt, prompt_input, fail_safe], logProbLastToken
+  #theAnswer = output['responses'][0]
+  #logProbLastToken = get_logprob_for_answer(theAnswer, logprobs)
+  return output, [output, prompt, prompt_input, fail_safe]#, logProbLastToken
 
 
 def categorical_resp(agent, questions): 
   anchor = " ".join(list(questions.keys()))
   agent_desc = _main_agent_desc(agent, anchor)
   return run_gpt_generate_categorical_resp(
-           agent_desc, questions, "1", LLM_VERS)#[0]
+           agent_desc, questions, "1", LLM_VERS)[0]
 
 
 def run_gpt_generate_numerical_resp(

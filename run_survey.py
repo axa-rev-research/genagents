@@ -9,7 +9,7 @@ from simulation_engine.settings import *
 if USE_MLFLOW:
     import mlflow
 
-def ask_agents(path, questions):
+def ask_agents(path, questions, save_results_every):
     # End any existing run if mlflow is enabled
     if USE_MLFLOW and mlflow.active_run():
         mlflow.end_run()
@@ -32,6 +32,9 @@ def ask_agents(path, questions):
         df = pd.read_csv(output_path)
     else:
         df = pd.DataFrame(columns=['agent_id', 'answer'])
+
+    # Initialize a counter for the number of processed subfolders
+    processed_count = 0
 
     # Iterate over each subfolder and create a GenerativeAgent object
     for subfolder in subfolders:
@@ -68,6 +71,14 @@ def ask_agents(path, questions):
         # Convert the new_row dictionary to a DataFrame and concatenate it with df
         new_row_df = pd.DataFrame([new_row])
         df = pd.concat([df, new_row_df], ignore_index=True)
+        
+        # Increment the processed count
+        processed_count += 1
+
+        # Save the DataFrame to a CSV file if the processed count reaches save_results_every
+        if processed_count >= save_results_every:
+            df.to_csv(output_path, index=False)
+            processed_count = 0
     
     # Save the DataFrame to a CSV file named 'answers.csv' in the same path
     df.to_csv(output_path, index=False)
@@ -120,6 +131,7 @@ if __name__ == "__main__":
     
     path = input_data['population_path']
     questions = input_data['questions']
+    save_results_every = input_data.get('save_results_every', 50)  # Default to 50 if not provided
     
     if USE_MLFLOW:
         mlflow.log_artifact(input_path)
@@ -134,8 +146,9 @@ if __name__ == "__main__":
     #     "population_path": "/Users/rubengarzon/source/stanford/genagents/agent_bank/a_few_agents",
     #     "questions": {
     #         "Do you enjoy outdoor activities?": ["Yes", "No", "Sometimes"]
-    #     }
+    #     },
+    #     "save_results_every": 5
     # }
     
-    df = ask_agents(path, questions)
+    df = ask_agents(path, questions, save_results_every)
 
