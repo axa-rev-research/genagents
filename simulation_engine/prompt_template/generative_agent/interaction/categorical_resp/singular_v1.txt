@@ -31,4 +31,4 @@ Output format -- output your response in json, where you provide the following:
             "<option 1>": "reasoning about why the participant might choose each of the options",
             "<option 2>": "..."},
        "Reasoning": "<reasoning on which of the option best predicts the participant's response>",
-       "Response": "<The option number of your prediction on how the participant will answer the question>"}}
+       "Response": "<your prediction on how the participant will answer the question>"}}

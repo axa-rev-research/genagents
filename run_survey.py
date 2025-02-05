@@ -57,7 +57,7 @@ def ask_agents(path, questions, save_results_every):
         scratch = scratch.strip('{}').replace('"', '')
 
         # Create a new row with the agent_id and answer
-        new_row = {'agent_id': agent_id, 'answer': answer, 'choice': answer[0]["responses"], 'logprobs':answer[2]}
+        new_row = {'agent_id': agent_id, 'answer': answer, 'choice': answer["responses"]}#, 'logprobs':answer[2]}
 
         # Parse the scratch string and add additional columns
         scratch_dict = {}

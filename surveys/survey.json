@@ -1,7 +1,8 @@
 {
-         "population_path": "/Users/rgarzon/Documents/Stanford/genagents/populations/repeat_20_times",
+         "population_path": "/Users/rgarzon/Documents/Stanford/genagents/populations/population_4373_age_50_51_52_53_54_55_56_57_58_59_60_61_62_63_64_65_66_67_68_69_70_71_72_73_74_75",
          "questions" : {
             "How much longer do you expect to live relative to others in your age?" 
-        : ["I expect to live longer.", "I expect to live about the same time.", "I expect to die sooner."]
-        }
+        : ["I expect to live about the same time.","I expect to die sooner.","I expect to live longer." ]
+        },
+        "save_results_every": 50
      }
