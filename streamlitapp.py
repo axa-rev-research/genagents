@@ -9,7 +9,7 @@ import os
 sys.path.insert(0, os.path.abspath(os.path.dirname(__file__)))  # Add current folder to the python path
 from genagents.genagents import GenerativeAgent
 from simulation_engine.settings import LLM_VERS  # Import LLM_VERS
-from settings import USERNAME, PASSWORD  # Import USERNAME and PASSWORD
+from simulation_engine.settings import STREAMLIT_USERNAME, STREAMLIT_PASSWORD  # Import USERNAME and PASSWORD
 
 def load_placeholder(file_path):
     with open(file_path) as json_file:
