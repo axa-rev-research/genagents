@@ -9,6 +9,7 @@ import os
 sys.path.insert(0, os.path.abspath(os.path.dirname(__file__)))  # Add current folder to the python path
 from genagents.genagents import GenerativeAgent
 from simulation_engine.settings import LLM_VERS  # Import LLM_VERS
+from settings import USERNAME, PASSWORD  # Import USERNAME and PASSWORD
 
 def load_placeholder(file_path):
     with open(file_path) as json_file:
@@ -41,7 +42,7 @@ def main():
     username = st.text_input("Username")
     password = st.text_input("Password", type="password")
     
-    if username != "genagents_axa" or password != "Bernstein_2025":
+    if username != STREAMLIT_USERNAME or password != STREAMLIT_PASSWORD:
         st.error("Invalid username or password")
         return
 
