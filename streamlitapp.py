@@ -8,6 +8,7 @@ import sys
 import os
 sys.path.insert(0, os.path.abspath(os.path.dirname(__file__)))  # Add current folder to the python path
 from genagents.genagents import GenerativeAgent
+from simulation_engine.settings import LLM_VERS  # Import LLM_VERS
 
 def load_placeholder(file_path):
     with open(file_path) as json_file:
@@ -36,6 +37,14 @@ def generate_excel(type_of_question, query, demographics, response):
 def main():
     st.title("Run study with genagents")
     
+    # Authentication
+    username = st.text_input("Username")
+    password = st.text_input("Password", type="password")
+    
+    if username != "genagents_axa" or password != "Bernstein_2025":
+        st.error("Invalid username or password")
+        return
+
     # Load placeholder information from JSON file
     current_path = os.path.dirname(os.path.abspath(__file__))
     placeholder_file_path = os.path.join(current_path, 'agent_bank/populations/gss_agents/0a1aa8c2-382a-4cd3-9d02-3a34e0592bbd/scratch.json')
@@ -45,7 +54,14 @@ def main():
     type_of_question_options = ['Categorical question', 'Numerical question']
     type_of_question = st.selectbox("Select type of question", type_of_question_options)
     
-     # Field 3: Text Entry with dynamic placeholder
+    # New Field: Model Selection
+    model_options = ['gpt-4o-mini','gpt-4o']
+    selected_model = st.selectbox("Select model", model_options)
+
+    # Update LLM_VERS based on selected model
+    LLM_VERS = selected_model
+
+    # Field 3: Text Entry with dynamic placeholder
     if type_of_question == "Categorical question":
         placeholder = "{'Do you enjoy outdoor activities?': ['Yes', 'No', 'Sometimes']}"
     else:
@@ -71,7 +87,7 @@ def main():
         #    progress_bar.progress(percent_complete)
          #   status_text.text(f"Processing: {percent_complete}% complete")
         status_text.text("Calling LLMs ...")
-        agent = GenerativeAgent()
+        agent = GenerativeAgent()  
         try:
             demographics_formatted = eval(demographics)
         except:
