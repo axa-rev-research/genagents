@@ -127,7 +127,7 @@ def run_gpt_generate_numerical_resp(
 
   prompt_input = create_prompt_input(agent_desc, questions, float_resp) 
   fail_safe = _get_fail_safe() 
-  output, prompt, prompt_input, fail_safe,logprobs = chat_safe_generate(
+  output, prompt, prompt_input, fail_safe = chat_safe_generate(
     prompt_input, prompt_lib_file, gpt_version, 1, fail_safe, 
     _func_clean_up, verbose)
 
